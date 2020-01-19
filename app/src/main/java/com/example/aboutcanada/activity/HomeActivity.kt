@@ -4,10 +4,12 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.aboutcanada.R
+import com.example.aboutcanada.Utils.AppUtils
 import com.example.aboutcanada.adapter.CountryInfoAdapter
 import com.example.aboutcanada.viewModel.CountryInfoViewModel
 import com.example.aboutcanada.pojo.CountryInfo
@@ -40,13 +42,23 @@ class HomeActivity : AppCompatActivity() {
     private fun defaultFunctionality() {
 
         setProgressDialog(true)
-        mCountryInfoViewModel.loadCountryInfo()
+
+        if(AppUtils.isInternetAvailable(mContext))
+            mCountryInfoViewModel.loadCountryInfo()
+        else
+            Toast.makeText(mContext, resources.getString(R.string.no_internet), Toast.LENGTH_LONG).show()
+
         setProgressDialog(false)
 
         srl_refresh.setOnRefreshListener {
 
             setProgressDialog(true)
-            mCountryInfoViewModel.loadCountryInfo()
+
+            if(AppUtils.isInternetAvailable(mContext))
+                mCountryInfoViewModel.loadCountryInfo()
+            else
+                Toast.makeText(mContext, resources.getString(R.string.no_internet), Toast.LENGTH_LONG).show()
+
             setProgressDialog(false)
 
             srl_refresh.isRefreshing = false
